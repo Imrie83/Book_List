@@ -4,6 +4,8 @@ from django.views import View
 from django.shortcuts import render, redirect
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.filters import SearchFilter, OrderingFilter
+
 from book_list.forms import AddBookForm, ImportBooksForm
 from book_list.models import BookModel
 from book_list.serializers import BookSerializer
@@ -142,10 +144,20 @@ class ImportBooksView(View):
 
 class BookViewSet(viewsets.ModelViewSet):
     """
-    API end point allowing to view book list
+    API end point allowing to view book list.
+    Pagination set to 10 entries per page.
     """
     queryset = BookModel.objects.order_by('title', 'author', 'pub_date')
     serializer_class = BookSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [
+        DjangoFilterBackend,
+        SearchFilter,
+        OrderingFilter,
+    ]
+
+    # Set up filtering options.
     # filterset_fields = ['title', 'author', 'pub_lang']
+    # use search instead of filtering.
     search_fields = ['title', 'author', 'pub_lang']
+    ordering_fields = ['title', 'author', 'pub_lang']
+    ordering = ['title', 'author', 'pub_date']
