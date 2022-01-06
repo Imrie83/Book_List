@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+    <section>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Publication Date</th>
+                    <th>Language</th>
+                    <th>Pages</th>
+                    <th>ISBN</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                    <tr>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.pub_date }}</td>
+                        <td>{{ book.pub_lang }}</td>
+                        <td>{{ book.pages }}</td>
+                        <td>{{ book.isbn }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                {% if book.cover_link %}
+                    <img src="{{ book.cover_link }}" alt="{{ book.title }} cover image">
+                {% endif %}
+            </tfoot>
+        </table>
+    </section>
+{% endblock %}

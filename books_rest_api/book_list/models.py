@@ -15,6 +15,7 @@ def validate_isbn(isbn):
     if '-' in isbn:
         temp_list = isbn.split('-')
         isbn = ''.join(temp_list)
+
     check_sum = isbn[-1]
 
     if check_sum == 'X':
