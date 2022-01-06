@@ -2,9 +2,11 @@ import requests
 import json
 from django.views import View
 from django.shortcuts import render, redirect
-from django.views.generic import CreateView
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
 from book_list.forms import AddBookForm, ImportBooksForm
 from book_list.models import BookModel
+from book_list.serializers import BookSerializer
 
 
 class BookListView(View):
@@ -89,7 +91,7 @@ class ImportBooksView(View):
             if resp.status_code == 200:
                 books = json.loads(resp.text)
             else:
-                books = None
+                books = Nonepip
 
             if books:
                 for b in books['items']:
@@ -136,3 +138,14 @@ class ImportBooksView(View):
                     'conf_msg': 'No books found',
                 }
             )
+
+
+class BookViewSet(viewsets.ModelViewSet):
+    """
+    API end point allowing to view book list
+    """
+    queryset = BookModel.objects.order_by('title', 'author', 'pub_date')
+    serializer_class = BookSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['title', 'author', 'pub_lang']
+    search_fields = ['title', 'author', 'pub_lang']
