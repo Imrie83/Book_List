@@ -65,7 +65,8 @@ class BookModel(models.Model):
         verbose_name='Author',
         null=True,
     )
-    pub_date = models.DateField(
+    pub_date = models.CharField(
+        max_length=10,
         verbose_name='Publication date',
         null=True,
     )
@@ -75,16 +76,15 @@ class BookModel(models.Model):
         null=True,
     )
     isbn = models.CharField(
-        max_length=13,
+        max_length=255,
         verbose_name='ISBN',
         null=False,
-        validators=[validate_isbn],
     )
     pages = models.IntegerField(
         verbose_name='Number of pages',
         null=True,
     )
-    cover_link = models.CharField(
+    cover_link = models.URLField(
         max_length=255,
         verbose_name='Cover link',
         null=True,

@@ -1,34 +1,46 @@
 {% extends 'base.html' %}
 {% block content %}
     <section>
-        <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Publication Date</th>
-                    <th>Language</th>
-                    <th>Pages</th>
-                    <th>ISBN</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for book in books %}
-                    <tr>
-                        <td>{{ book.title }}</td>
-                        <td>{{ book.author }}</td>
-                        <td>{{ book.pub_date }}</td>
-                        <td>{{ book.pub_lang }}</td>
-                        <td>{{ book.pages }}</td>
-                        <td>{{ book.isbn }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                {% if book.cover_link %}
-                    <img src="{{ book.cover_link }}" alt="{{ book.title }} cover image">
-                {% endif %}
-            </tfoot>
-        </table>
+        {% if books %}
+        <div class="container" style="display: block">
+        {% for book in books %}
+            <div class="book-container" style="clear: both; display: flex; font-size: 14px; line-height: 1.58; margin-bottom: 18px;">
+                <div class="cover-container" style="min-width: 110px;">
+                    <div class="cover" style="align-items: center; border: 1px #DFE1E5 solid; color: #70757a; display: flex; height: 150px; line-height: 16px; width: 110px;">
+                        <div style="text-align: center">
+                            {% if not book.cover_link %}
+                            No Cover Available
+                            {% else %}
+                            <img src="{{ book.cover_link }}" aria-label="cover for {{ book.title }}" style="height: 150px; width: 110px;">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="details" style="position: relative; margin: 5px 0 0 20px;">
+                    <div>
+                        <h4>
+                        {{ book.title }}
+                        </h4>
+                    </div>
+                    <div>
+                        Author: {{ book.author }}
+                    </div>
+                    <div>
+                        Published: {{ book.pub_date }}
+                    </div>
+                    <div>
+                        Language: {{ book.pub_lang }}
+                    </div>
+                    <div>
+                        Pages:{{ book.pages }}
+                    </div>
+                    <div>
+                        {{ book.isbn }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        {% endif %}
     </section>
 {% endblock %}

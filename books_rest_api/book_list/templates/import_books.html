@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>Import criteria</div>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="import" value="Import">
+</form>
+    {% if conf_msg %}
+        {{ conf_msg }}
+    {% endif %}
+{% endblock %}
