@@ -2,9 +2,9 @@
 {% block content %}
     <section>
         {% if books %}
-        <div class="container" style="display: block">
+        <div class="container">
         {% for book in books %}
-            <div class="book-container" style="clear: both; display: flex; font-size: 14px; line-height: 1.58; margin-bottom: 18px;">
+            <div class="book-container">
                 <div class="cover-container" style="min-width: 110px;">
                     <div class="cover" style="align-items: center; border: 1px #DFE1E5 solid; color: #70757a; display: flex; height: 150px; line-height: 16px; width: 110px;">
                         <div style="text-align: center">
@@ -40,6 +40,25 @@
                 </div>
             </div>
         {% endfor %}
+        </div>
+        <div class="pagination">
+            {% if books.has_previous %}
+                <a href="?page={{ books.previous_page_number }}">poprzednia</a>|
+                {% else %}
+                poprzednia |
+            {% endif %}
+            {% for page in books.paginator.page_range %}
+                {%  if page == books.number %}
+                {{ page }} |
+                {% else %}
+                <a href="?page={{ page }}">{{ page }} </a>|
+                {% endif %}
+            {% endfor %}
+        {% if books.has_next %}
+            <a href="?page={{ books.next_page_number }}">następna</a>
+        {% else %}
+            następna
+        {% endif %}
         </div>
         {% endif %}
     </section>

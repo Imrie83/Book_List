@@ -1,5 +1,7 @@
 import requests
 import json
+
+from django.core.paginator import Paginator
 from django.views import View
 from django.shortcuts import render, redirect
 from django_filters.rest_framework import DjangoFilterBackend
@@ -13,11 +15,14 @@ from book_list.serializers import BookSerializer
 
 class BookListView(View):
     def get(self, request):
-        books = BookModel.objects.all().order_by(
+        book_list = BookModel.objects.all().order_by(
             'author',
             'title',
             'pub_date',
         )
+        paginator =  Paginator(book_list, 12)
+        page_num = request.GET.get('page')
+        books = paginator.get_page(page_num)
 
         return render(
             request,
