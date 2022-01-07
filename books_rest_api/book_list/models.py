@@ -75,11 +75,11 @@ class BookModel(models.Model):
         verbose_name='Publication language',
         null=True,
     )
-    isbn = models.CharField(
-        max_length=255,
-        verbose_name='ISBN',
-        null=False,
-    )
+    # isbn = models.CharField(
+    #     max_length=255,
+    #     verbose_name='ISBN',
+    #     null=False,
+    # )
     pages = models.IntegerField(
         verbose_name='Number of pages',
         null=True,
@@ -88,4 +88,22 @@ class BookModel(models.Model):
         max_length=255,
         verbose_name='Cover link',
         null=True,
+    )
+
+
+class IsbnModel(models.Model):
+    isbn_type = models.CharField(
+        max_length=255,
+        verbose_name='type',
+        null=True,
+    )
+    isbn_num = models.CharField(
+        max_length=255,
+        verbose_name='isbn',
+        null=True,
+    )
+    book = models.ForeignKey(
+        to=BookModel,
+        related_name='book_isbn',
+        on_delete=models.CASCADE,
     )

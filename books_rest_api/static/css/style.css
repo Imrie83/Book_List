@@ -158,18 +158,18 @@ body {
 .container {
   display: flex;
   max-width: 80%;
-  max-height: 80%;
-  align-content: center;
-  margin: auto;
+  align-items: center;
+  margin: 20px auto 0 auto;
   justify-content: space-around;
   flex-flow: wrap;
   padding: 20px;
 }
 
 .book-container{
-  clear: both;
   display: flex;
-  font-size: 14px;
+  flex-flow: row;
+  align-items: center;
+  font-size: .85em;
   line-height: 1.58;
   margin-bottom: 18px;
   width: 450px;
@@ -229,5 +229,33 @@ body {
   margin: 5px auto 5px auto;
   height: 25px;
   width: 250px;
+}
 
+.cover-container {
+  min-width: 110px;
+}
+
+.cover {
+  align-items: center;
+  border: 1px #DFE1E5 solid;
+  color: #70757a;
+  display: flex;
+  height: 145px;
+  line-height: 16px;
+  width: 109px;
+}
+
+.cover img{
+  height: 150px;
+  width: 110px;
+}
+
+.details {
+  margin: 0 0 0 20px;
+  align-items: center;
+}
+
+.title {
+  border-bottom: lightslategrey 1px solid;
+  padding-bottom: 2px;
 }
