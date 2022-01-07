@@ -259,3 +259,9 @@ body {
   border-bottom: lightslategrey 1px solid;
   padding-bottom: 2px;
 }
+
+.valid-error {
+  padding: 5px 0 10px 0;
+  font-size: 0.85em;
+  color: darkred;
+}

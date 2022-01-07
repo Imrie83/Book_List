@@ -8,7 +8,14 @@
         <div>{{ form.title }}</div>
         <div>{{ form.author }}</div>
         <div>{{ form.pub_lang }}</div>
-        <div>{{ isbn_form.isbn_num }}</div>
+        <div>
+            {{ isbn_form.isbn_num }}
+            <div class="valid-error">
+            {% for key, value in isbn_form.errors.items %}
+            {{ value|striptags }}
+            {% endfor %}
+            </div>
+        </div>
         <div>{{ form.pages }}</div>
         <div>{{ form.cover_link }}</div>
         <div>Published on:<br>

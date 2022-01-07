@@ -17,6 +17,10 @@ def validate_isbn(isbn):
         temp_list = isbn.split('-')
         isbn = ''.join(temp_list)
 
+    for digit in isbn[:-1]:
+        if not digit.isdigit():
+            raise ValidationError('ISBN must consist of numbers.')
+
     check_sum = isbn[-1]
 
     if check_sum == 'X':
