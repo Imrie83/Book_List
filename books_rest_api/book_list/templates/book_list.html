@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block searchbar %}
+    <form method="post">
+        {% csrf_token %}
+        <div>{{ form.search }}</div>
+        <div style="display: flex; justify-content: center">{{ form.date_from }}{{ form.date_to }}</div>
+        <input type="submit" value="search" class="search-btn">
+    </form>
+{% endblock %}
+{% block content %}
+    <section>
+        {% if books %}
+        <div class="container">
+        {% for book in books %}
+            <div class="book-container">
+                <div class="cover-container" style="min-width: 110px;">
+                    <div class="cover" style="align-items: center; border: 1px #DFE1E5 solid; color: #70757a; display: flex; height: 150px; line-height: 16px; width: 110px;">
+                        <div style="text-align: center">
+                            {% if not book.cover_link %}
+                            No Cover Available
+                            {% else %}
+                            <img src="{{ book.cover_link }}" aria-label="cover for {{ book.title }}" style="height: 150px; width: 110px;">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="details" style="position: relative; margin: 5px 0 0 20px;">
+                    <div>
+                        <h4>
+                        {{ book.title }}
+                        </h4>
+                    </div>
+                    <div>
+                        Author: {{ book.author }}
+                    </div>
+                    <div>
+                        Published: {{ book.pub_date }}
+                    </div>
+                    <div>
+                        Language: {{ book.pub_lang }}
+                    </div>
+                    <div>
+                        Pages:{{ book.pages }}
+                    </div>
+                    <div>
+                        {{ book.isbn }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="pagination">
+            {% if books.has_previous %}
+                <a href="?page={{ books.previous_page_number }}">poprzednia</a>|
+                {% else %}
+                poprzednia |
+            {% endif %}
+            {% for page in books.paginator.page_range %}
+                {%  if page == books.number %}
+                {{ page }} |
+                {% else %}
+                <a href="?page={{ page }}">{{ page }} </a>|
+                {% endif %}
+            {% endfor %}
+        {% if books.has_next %}
+            <a href="?page={{ books.next_page_number }}">następna</a>
+        {% else %}
+            następna
+        {% endif %}
+        </div>
+        {% else %}
+            <div class="error-msg">
+            {{ error }}
+            </div>
+        {% endif %}
+
+    </section>
+{% endblock %}
