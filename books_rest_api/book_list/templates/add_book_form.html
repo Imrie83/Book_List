@@ -5,14 +5,13 @@
     <form method="post" class="add-book">
         Add book:
         {% csrf_token %}
-{#        {{ form.as_p }}#}
         <div>{{ form.title }}</div>
         <div>{{ form.author }}</div>
         <div>{{ form.pub_lang }}</div>
-        <div>{{ form.isbn }}</div>
+        <div>{{ isbn_form.isbn_num }}</div>
         <div>{{ form.pages }}</div>
         <div>{{ form.cover_link }}</div>
-        <div>Publicated on:<br>
+        <div>Published on:<br>
             {{ form.pub_date }}</div>
         <input type="submit" value="Add Book">
     </form>

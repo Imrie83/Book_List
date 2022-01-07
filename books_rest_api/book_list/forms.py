@@ -1,5 +1,54 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from book_list.models import BookModel
+
+
+def validate_isbn(isbn):
+    """
+    function validates isbn number
+    :param isbn:
+    :raise: ValidationError
+    """
+
+    i = 1
+    control = 0
+
+    if '-' in isbn:
+        temp_list = isbn.split('-')
+        isbn = ''.join(temp_list)
+
+    check_sum = isbn[-1]
+
+    if check_sum == 'X':
+        check_sum = 10
+    else:
+        check_sum = int(check_sum)
+
+    if len(isbn) == 10:
+        for num in isbn[:-1]:
+            control += int(num) * i
+            i += 1
+        control = control % 11
+
+        if not control == check_sum:
+            raise ValidationError(f'{isbn} is not a valid isbn')
+
+    elif len(isbn) == 13:
+        for num in isbn[:-1:2]:
+            control += int(num)
+        for num in isbn[1:-1:2]:
+            control += int(num) * 3
+
+        if control % 10 == 0:
+            control = 0
+        else:
+            control = 10 - (control % 10)
+
+        if not control == check_sum:
+            raise ValidationError(f'{isbn} is not a valid isbn')
+
+    else:
+        raise ValidationError(f'{isbn} is not a valid isbn')
 
 
 class DatePickerField(forms.DateInput):
@@ -106,3 +155,18 @@ class SearchForm(forms.Form):
     date_to.widget.attrs.update({
         'class': 'date-picker'
     })
+
+
+class AddISBNForm(forms.Form):
+
+    isbn_num = forms.CharField(
+        max_length=20,
+        required=False,
+        label='',
+        validators=[validate_isbn],
+    )
+
+    isbn_num.widget.attrs.update({
+        'placeholder': 'ISBN number'
+    })
+

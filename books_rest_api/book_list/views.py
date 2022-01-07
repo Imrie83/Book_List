@@ -12,7 +12,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from book_list.forms import (
     AddBookForm,
     ImportBooksForm,
-    SearchForm,
+    SearchForm, AddISBNForm,
 )
 
 from book_list.models import BookModel
@@ -98,12 +98,14 @@ class BookListView(View):
 class AddBookView(View):
     def get(self, request):
         form = AddBookForm()
+        isbn_form = AddISBNForm()
 
         return render(
             request,
             'add_book_form.html',
             context={
                 'form': form,
+                'isbn_form': isbn_form,
             }
         )
 
