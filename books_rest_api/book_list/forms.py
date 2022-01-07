@@ -13,9 +13,33 @@ class AddBookForm(forms.ModelForm):
     class Meta:
         model = BookModel
         fields = '__all__'
+
+        labels = {
+            'title': '',
+            'author': '',
+            'pub_date': 'Published on',
+            'pub_lang': '',
+            'isbn': '',
+            'pages': '',
+            'cover_link': '',
+        }
+
         widgets = {
             'pub_date': DatePickerField(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(AddBookForm, self).__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({'placeholder': 'Title'})
+        self.fields['author'].widget.attrs.update({'placeholder': 'Author'})
+        self.fields['pub_lang'].widget.attrs.update({
+            'placeholder': 'Publication language'
+        })
+        self.fields['isbn'].widget.attrs.update({'placeholder': 'ISBN'})
+        self.fields['pages'].widget.attrs.update({'placeholder': 'Number of pages'})
+        self.fields['cover_link'].widget.attrs.update({
+            'placeholder': 'Link to book cover'
+        })
 
 
 class ImportBooksForm(forms.Form):
