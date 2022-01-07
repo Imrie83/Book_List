@@ -1,12 +1,30 @@
 from rest_framework import serializers
 
-from book_list.models import BookModel
+from book_list.models import BookModel, IsbnModel
 
 
-class BookSerializer(serializers.HyperlinkedModelSerializer):
+class IsbnSerializer(serializers.ModelSerializer):
     """
-    class creates BookModel serializer
+    Create ISBN model serializer.
     """
+    class Meta:
+        model = IsbnModel
+        fields = [
+            'isbn_type',
+            'isbn_num',
+        ]
+
+
+class BookSerializer(serializers.ModelSerializer):
+    """
+    Create BookModel serializer with nested ISBN serialiser.
+    """
+    isbn = IsbnSerializer(
+        many=True,
+        read_only=True,
+        source='book_isbn',
+    )
+
     class Meta:
         model = BookModel
         fields = [
@@ -14,7 +32,7 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
             'author',
             'pub_date',
             'pub_lang',
-            'isbn',
             'pages',
+            'isbn',
             'cover_link',
         ]

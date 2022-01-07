@@ -68,7 +68,6 @@ class AddBookForm(forms.ModelForm):
             'author': '',
             'pub_date': 'Published on',
             'pub_lang': '',
-            'isbn': '',
             'pages': '',
             'cover_link': '',
         }
@@ -84,11 +83,15 @@ class AddBookForm(forms.ModelForm):
         self.fields['pub_lang'].widget.attrs.update({
             'placeholder': 'Publication language'
         })
-        self.fields['isbn'].widget.attrs.update({'placeholder': 'ISBN'})
         self.fields['pages'].widget.attrs.update({'placeholder': 'Number of pages'})
         self.fields['cover_link'].widget.attrs.update({
             'placeholder': 'Link to book cover'
         })
+        self.fields['author'].required = False
+        self.fields['pub_lang'].required = False
+        self.fields['pub_date'].required = False
+        self.fields['pages'].required = False
+        self.fields['cover_link'].required = False
 
 
 class ImportBooksForm(forms.Form):

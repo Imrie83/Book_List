@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.views import View
 from django.shortcuts import render, redirect
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 
 from book_list.forms import (
@@ -15,8 +15,8 @@ from book_list.forms import (
     SearchForm, AddISBNForm,
 )
 
-from book_list.models import BookModel
-from book_list.serializers import BookSerializer
+from book_list.models import BookModel, IsbnModel
+from book_list.serializers import BookSerializer, IsbnSerializer
 
 
 class BookListView(View):
@@ -28,7 +28,7 @@ class BookListView(View):
             'title',
             'pub_date',
         )
-        paginator =  Paginator(book_list, 12)
+        paginator = Paginator(book_list, 12)
         page_num = request.GET.get('page')
         books = paginator.get_page(page_num)
 
@@ -167,33 +167,39 @@ class ImportBooksView(View):
                 books = None
 
             if books:
+                books_added = 0
                 for b in books['items']:
-                    book = BookModel.objects.create(title=b['volumeInfo']['title'])
+                    if 'title' in b['volumeInfo']:
+                        book = BookModel.objects.create(title=b['volumeInfo']['title'])
+                        books_added += 1
 
-                    if 'authors' in b['volumeInfo']:
-                        book.author = ', '.join(b['volumeInfo']['authors'])
+                        if 'authors' in b['volumeInfo']:
+                            book.author = ', '.join(b['volumeInfo']['authors'])
 
-                    if 'publishedDate' in b['volumeInfo']:
-                        book.pub_date = b['volumeInfo']['publishedDate']
+                        if 'publishedDate' in b['volumeInfo']:
+                            book.pub_date = b['volumeInfo']['publishedDate']
 
-                    if 'language' in b['volumeInfo']:
-                        book.pub_lang = b['volumeInfo']['language']
+                        if 'language' in b['volumeInfo']:
+                            book.pub_lang = b['volumeInfo']['language']
 
-                    if 'industryIdentifiers' in b['volumeInfo']:
-                        for element in b['volumeInfo']['industryIdentifiers']:
-                            if 'isbn' in element['type'].lower():
-                                book.isbn += f"{element['type']}: {element['identifier']} "
+                        if 'pageCount' in b['volumeInfo']:
+                            book.pages = int(b['volumeInfo']['pageCount'])
 
-                    if 'pageCount' in b['volumeInfo']:
-                        book.pages = int(b['volumeInfo']['pageCount'])
+                        if 'imageLinks' in b['volumeInfo']:
+                            book.cover_link = b['volumeInfo']['imageLinks']['thumbnail']
 
-                    if 'imageLinks' in b['volumeInfo']:
-                        book.cover_link = b['volumeInfo']['imageLinks']['thumbnail']
+                        book.save()
 
-                    book.save()
+                        if 'industryIdentifiers' in b['volumeInfo']:
+                            for element in b['volumeInfo']['industryIdentifiers']:
+                                if 'isbn' in element['type'].lower():
+                                    isbn = IsbnModel.objects.create(
+                                        book_id=book.pk,
+                                        isbn_num=element['identifier'],
+                                        isbn_type=element['type'],
+                                    )
 
-                books_added = f"Books imported: {len(books['items'])}"
-
+                form = ImportBooksForm()
                 return render(
                     request,
                     'import_books.html',
@@ -213,13 +219,14 @@ class ImportBooksView(View):
             )
 
 
-class BookViewSet(viewsets.ModelViewSet):
+class BookViewSet(generics.ListAPIView):
     """
     API end point allowing to view book list.
     Pagination set to 10 entries per page.
     """
     queryset = BookModel.objects.order_by('title', 'author', 'pub_date')
     serializer_class = BookSerializer
+    model = BookModel
     filter_backends = [
         DjangoFilterBackend,
         SearchFilter,
