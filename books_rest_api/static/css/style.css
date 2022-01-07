@@ -12,7 +12,7 @@ body {
   margin-bottom: 20px;
   background: #232323;
   color: #cdcdcd;
-  padding: 20px;
+  padding: 10px 20px 10px 20px;
   z-index: 1;
   -webkit-user-select: none;
   user-select: none;
@@ -29,17 +29,6 @@ body {
   color: #00C6A7;
 }
 
-/*.menu-container input {*/
-/*  display: block;*/
-/*  width: 35px;*/
-/*  height: 25px;*/
-/*  margin: 0;*/
-/*  position: absolute;*/
-/*  cursor: pointer;*/
-/*  opacity: 0; !* hide this *!*/
-/*  z-index: 2; !* and place it over the hamburger *!*/
-/*  -webkit-touch-callout: none;*/
-/*}*/
 .toggle {
   display: block;
   width: 35px;
@@ -132,6 +121,7 @@ body {
 @media only screen and (min-width: 800px) {
   .menu-container {
     width: 100%;
+    color: #cdcdcd;
   }
 
   .menu-container a {
@@ -196,12 +186,26 @@ body {
 }
 
 .search-bar {
-
+  height: 16px;
+  width: 264px;
+  border: none;
+  margin: 1px;
 }
-
+.date-picker {
+  width: 132px;
+  height: 16px;
+  border: none;
+  margin: 1px;
+}
 .error-msg {
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 22px;
+}
+.search-btn {
+  width: 268px;
+  border: none;
+  height: 20px;
+  margin: 1px;
 }

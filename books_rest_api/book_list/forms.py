@@ -56,10 +56,29 @@ class SearchForm(forms.Form):
     search = forms.CharField(
         max_length=255,
         required=False,
+        label='Search',
+    )
+    date_from = forms.CharField(
+        max_length=255,
+        required=False,
+        label='Publication span',
+        widget=DatePickerField()
+    )
+    date_to = forms.CharField(
+        max_length=255,
+        required=False,
         label='',
+        widget=DatePickerField()
+
     )
 
     search.widget.attrs.update({
         'placeholder': 'title / author / language',
         'class': 'search-bar'
+    })
+    date_from.widget.attrs.update({
+        'class': 'date-picker'
+    })
+    date_to.widget.attrs.update({
+        'class': 'date-picker'
     })

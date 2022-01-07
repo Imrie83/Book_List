@@ -23,18 +23,9 @@
                 <li><a href="/import/" class="nav-link">Import Books</a></li>
                 <li><a href="/books/" class="nav-link">Books API</a></li>
             </ul>
-            <!-- search bar -->
-            <ul>
-                <li>
-                    {% block searchbar %}
-                    {% endblock %}
-                </li>
-                <li>
-                    {% block date_picker %}
-                    {% endblock %}
-                </li>
-            </ul>
          </div>
+        {% block searchbar %}
+        {% endblock %}
     </nav>
 {% block content %}
 {% endblock %}

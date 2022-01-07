@@ -2,8 +2,9 @@
 {% block searchbar %}
     <form method="post">
         {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="search">
+        <div>{{ form.search }}</div>
+        <div style="display: flex; justify-content: center">{{ form.date_from }}{{ form.date_to }}</div>
+        <input type="submit" value="search" class="search-btn">
     </form>
 {% endblock %}
 {% block content %}

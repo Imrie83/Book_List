@@ -46,6 +46,7 @@ class BookListView(View):
 
         if form.is_valid():
             search_q = form.cleaned_data['search']
+
             book_list = BookModel.objects.all().filter(
                 Q(title__icontains=search_q) |
                 Q(author__icontains=search_q) |
@@ -55,6 +56,16 @@ class BookListView(View):
                 'title',
                 'pub_date',
             )
+
+            if form.cleaned_data['date_from']:
+                book_list = book_list.filter(
+                    pub_date__gte=form.cleaned_data['date_from']
+                )
+
+            if form.cleaned_data['date_to']:
+                book_list = book_list.filter(
+                    pub_date__lte=form.cleaned_data['date_to']
+                )
 
             if book_list:
 
