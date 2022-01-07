@@ -123,6 +123,7 @@ class AddBookView(View):
                 }
             )
 
+
 class ImportBooksView(View):
     def get(self, request):
         form = ImportBooksForm()
@@ -157,10 +158,11 @@ class ImportBooksView(View):
                 query += f'+subject:"{search_subject}"'
 
             resp = requests.get(query)
-            if resp.status_code == 200:
+            if resp.status_code == 200 and json.loads(resp.text)['totalItems']:
                 books = json.loads(resp.text)
+
             else:
-                books = Nonepip
+                books = None
 
             if books:
                 for b in books['items']:
