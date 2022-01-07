@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+{% block searchbar %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="search">
+    </form>
+{% endblock %}
 {% block content %}
     <section>
         {% if books %}
@@ -60,6 +67,11 @@
             następna
         {% endif %}
         </div>
+        {% else %}
+            <div class="error-msg">
+            {{ error }}
+            </div>
         {% endif %}
+
     </section>
 {% endblock %}

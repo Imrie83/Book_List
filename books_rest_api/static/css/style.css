@@ -29,7 +29,18 @@ body {
   color: #00C6A7;
 }
 
-.menu-container input {
+/*.menu-container input {*/
+/*  display: block;*/
+/*  width: 35px;*/
+/*  height: 25px;*/
+/*  margin: 0;*/
+/*  position: absolute;*/
+/*  cursor: pointer;*/
+/*  opacity: 0; !* hide this *!*/
+/*  z-index: 2; !* and place it over the hamburger *!*/
+/*  -webkit-touch-callout: none;*/
+/*}*/
+.toggle {
   display: block;
   width: 35px;
   height: 25px;
@@ -65,18 +76,18 @@ body {
   transform-origin: 0% 100%;
 }
 
-.menu-container input:checked ~ span {
+.toggle:checked ~ span {
   opacity: 1;
   transform: rotate(45deg) translate(3px,-1px);
   background: #232323;
 }
 
-.menu-container input:checked ~ span:nth-child(4) {
+.toggle:checked ~ span:nth-child(4) {
   opacity: 0;
   transform: rotate(0deg) scale(0.2, 0.2);
 }
 
-.menu-container input:checked ~ span:nth-child(3) {
+.toggle:checked ~ span:nth-child(3) {
   transform: rotate(-45deg) translate(-5px,11px);
 }
 
@@ -127,7 +138,7 @@ body {
     color: #cdcdcd;
   }
 
-  .menu-container input {
+  .toggle {
     display: none;
   }
 
@@ -182,4 +193,15 @@ body {
   color: black;
   text-decoration: none;
   padding: 0 4px 0 4px;
+}
+
+.search-bar {
+
+}
+
+.error-msg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
 }

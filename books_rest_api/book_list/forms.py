@@ -50,3 +50,16 @@ class ImportBooksForm(forms.Form):
     search_isbn.widget.attrs.update({'placeholder': 'isbn'})
     search_subject.widget.attrs.update({'placeholder': 'category'})
     search_publisher.widget.attrs.update({'placeholder': 'publisher'})
+
+
+class SearchForm(forms.Form):
+    search = forms.CharField(
+        max_length=255,
+        required=False,
+        label='',
+    )
+
+    search.widget.attrs.update({
+        'placeholder': 'title / author / language',
+        'class': 'search-bar'
+    })

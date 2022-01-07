@@ -2,19 +2,27 @@ import requests
 import json
 
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.views import View
 from django.shortcuts import render, redirect
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
 
-from book_list.forms import AddBookForm, ImportBooksForm
+from book_list.forms import (
+    AddBookForm,
+    ImportBooksForm,
+    SearchForm,
+)
+
 from book_list.models import BookModel
 from book_list.serializers import BookSerializer
 
 
 class BookListView(View):
     def get(self, request):
+
+        form = SearchForm()
         book_list = BookModel.objects.all().order_by(
             'author',
             'title',
@@ -29,8 +37,51 @@ class BookListView(View):
             'book_list.html',
             context={
                 'books': books,
+                'form': form,
             }
         )
+
+    def post(self, request):
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            search_q = form.cleaned_data['search']
+            book_list = BookModel.objects.all().filter(
+                Q(title__icontains=search_q) |
+                Q(author__icontains=search_q) |
+                Q(pub_lang__icontains=search_q)
+            ).order_by(
+                'author',
+                'title',
+                'pub_date',
+            )
+
+            if book_list:
+
+                paginator = Paginator(book_list, 12)
+                page_num = request.GET.get('page')
+                books = paginator.get_page(page_num)
+                form = SearchForm()
+
+                return render(
+                    request,
+                    'book_list.html',
+                    context={
+                        'books': books,
+                        'form': form,
+                    }
+                )
+            else:
+                error = 'No books found.'
+                return render(
+                    request,
+                    'book_list.html',
+                    context={
+                        'form': form,
+                        'error': error,
+                    }
+                )
+        return redirect('/')
 
 
 class AddBookView(View):
