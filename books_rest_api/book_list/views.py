@@ -6,17 +6,17 @@ from django.db.models import Q
 from django.views import View
 from django.shortcuts import render, redirect
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, generics
+from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 
 from book_list.forms import (
     AddBookForm,
     ImportBooksForm,
-    SearchForm,
+    SearchForm, AddISBNForm,
 )
 
 from book_list.models import BookModel, IsbnModel
-from book_list.serializers import BookSerializer, IsbnSerializer
+from book_list.serializers import BookSerializer
 
 
 class BookListView(View):
@@ -98,20 +98,37 @@ class BookListView(View):
 class AddBookView(View):
     def get(self, request):
         form = AddBookForm()
+        isbn_form = AddISBNForm()
 
         return render(
             request,
             'add_book_form.html',
             context={
                 'form': form,
+                'isbn_form': isbn_form,
             }
         )
 
     def post(self, request):
-        form = AddBookForm(request.POST)
 
-        if form.is_valid():
-            form.save()
+        form = AddBookForm(request.POST)
+        isbn_form = AddISBNForm(request.POST)
+
+        if form.is_valid() and isbn_form.is_valid():
+            book = form.save()
+
+            isbn_type = ''
+            if len(isbn_form.cleaned_data['isbn_num']) == 10:
+                isbn_typ = 'ISBN_10'
+            elif len(isbn_form.cleaned_data['isbn_num']) == 13:
+                isbn_type = 'ISBN_13'
+
+            isbn = IsbnModel.objects.create(
+                book_id=book.pk,
+                isbn_type=isbn_type,
+                isbn_num=isbn_form.cleaned_data['isbn_num']
+            )
+
             return redirect('/')
 
         else:
@@ -120,6 +137,7 @@ class AddBookView(View):
                 'add_book_form.html',
                 context={
                     'form': form,
+                    'isbn_form': isbn_form,
                 }
             )
 

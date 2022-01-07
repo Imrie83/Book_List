@@ -75,11 +75,6 @@ class BookModel(models.Model):
         verbose_name='Publication language',
         null=True,
     )
-    # isbn = models.CharField(
-    #     max_length=255,
-    #     verbose_name='ISBN',
-    #     null=False,
-    # )
     pages = models.IntegerField(
         verbose_name='Number of pages',
         null=True,
