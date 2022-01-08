@@ -27,8 +27,10 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'https://my-book-list-api.herokuapp.com/',
+    'my-book-list-api.herokuapp.com/',
     'localhost',
+    '127.0.0.1',
+    '.herokuapp.com',
 ]
 
 
