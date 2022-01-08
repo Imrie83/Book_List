@@ -83,7 +83,7 @@ class BookListView(View):
                     }
                 )
             else:
-                error = 'No books found.'
+                error = 'No books found'
                 return render(
                     request,
                     'book_list.html',
@@ -220,7 +220,7 @@ class ImportBooksView(View):
                     request,
                     'import_books.html',
                     context={
-                        "conf_msg": books_added,
+                        "conf_msg": f'Books imported: {books_added}',
                         "form": form,
                     }
                 )
