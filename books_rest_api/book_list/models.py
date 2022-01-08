@@ -1,58 +1,9 @@
-from django.core.exceptions import ValidationError
 from django.db import models
-
-
-def validate_isbn(isbn):
-    """
-    function validates isbn number
-    :param isbn:
-    :raise: ValidationError
-    """
-
-    i = 1
-    control = 0
-
-    if '-' in isbn:
-        temp_list = isbn.split('-')
-        isbn = ''.join(temp_list)
-
-    check_sum = isbn[-1]
-
-    if check_sum == 'X':
-        check_sum = 10
-    else:
-        check_sum = int(check_sum)
-
-    if len(isbn) == 10:
-        for num in isbn[:-1]:
-            control += int(num) * i
-            i += 1
-        control = control % 11
-
-        if not control == check_sum:
-            raise ValidationError(f'{isbn} is not a valid isbn')
-
-    elif len(isbn) == 13:
-        for num in isbn[:-1:2]:
-            control += int(num)
-        for num in isbn[1:-1:2]:
-            control += int(num) * 3
-
-        if control % 10 == 0:
-            control = 0
-        else:
-            control = 10 - (control % 10)
-
-        if not control == check_sum:
-            raise ValidationError(f'{isbn} is not a valid isbn')
-
-    else:
-        raise ValidationError(f'{isbn} is not a valid isbn')
 
 
 class BookModel(models.Model):
     """
-    class creates database model storing book information
+    Database model storing book information
     """
 
     title = models.CharField(
@@ -87,6 +38,9 @@ class BookModel(models.Model):
 
 
 class IsbnModel(models.Model):
+    """
+    Database model storing isbn numbers for books
+    """
     isbn_type = models.CharField(
         max_length=255,
         verbose_name='type',
