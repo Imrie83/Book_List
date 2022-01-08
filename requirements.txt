@@ -6,6 +6,7 @@ charset-normalizer==2.0.10
 Django==4.0.1
 django-filter==21.1
 djangorestframework==3.13.1
+gunicorn==20.1.0
 idna==3.3
 iniconfig==1.1.1
 packaging==21.3
