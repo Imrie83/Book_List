@@ -25,14 +25,10 @@ from book_list.views import (
 )
 
 
-# router = routers.DefaultRouter()
-# router.register(r'books', BookViewSet)
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', BookListView.as_view(), name='book_list'),
     path('add_book/', AddBookView.as_view(), name='add_book'),
     path('import/', ImportBooksView.as_view(), name='import'),
-    # path('', include(router.urls)),
-    path('books/', BookViewSet.as_view())
+    path('books/api/', BookViewSet.as_view(), name='books_api'),
 ]
