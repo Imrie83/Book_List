@@ -56,7 +56,7 @@ def test_database(client, example_books):
 @pytest.mark.django_db
 def test_book_list(client, example_books):
     """
-    Test loading main page and extracting books to display from db.
+    Test loading main page and extracting books to display from db
     :param client:
     :param example_books:
     """

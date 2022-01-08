@@ -39,7 +39,7 @@ class BookModel(models.Model):
 
 class IsbnModel(models.Model):
     """
-    Database model storing isbn numbers for books
+    Database model storing isbn for books
     """
     isbn_type = models.CharField(
         max_length=255,

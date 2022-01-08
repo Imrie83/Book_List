@@ -21,12 +21,10 @@ def validate_isbn(isbn):
         if not digit.isdigit():
             raise ValidationError('ISBN must consist of numbers.')
 
-    check_sum = isbn[-1]
-
-    if check_sum == 'X':
+    if isbn[-1] == 'X':
         check_sum = 10
     else:
-        check_sum = int(check_sum)
+        check_sum = int(isbn[-1])
 
     if len(isbn) == 10:
         for num in isbn[:-1]:
@@ -63,6 +61,9 @@ class DatePickerField(forms.DateInput):
 
 
 class AddBookForm(forms.ModelForm):
+    """
+    Create a form allowing to manually add a book to db
+    """
     class Meta:
         model = BookModel
         fields = '__all__'
@@ -87,7 +88,9 @@ class AddBookForm(forms.ModelForm):
         self.fields['pub_lang'].widget.attrs.update({
             'placeholder': 'Publication language'
         })
-        self.fields['pages'].widget.attrs.update({'placeholder': 'Number of pages'})
+        self.fields['pages'].widget.attrs.update({
+            'placeholder': 'Number of pages'
+        })
         self.fields['cover_link'].widget.attrs.update({
             'placeholder': 'Link to book cover'
         })
@@ -99,6 +102,9 @@ class AddBookForm(forms.ModelForm):
 
 
 class ImportBooksForm(forms.Form):
+    """
+    Create a form allowing to import books from Google Books API
+    """
     search_title = forms.CharField(
         max_length=255,
         label='',
@@ -133,6 +139,9 @@ class ImportBooksForm(forms.Form):
 
 
 class SearchForm(forms.Form):
+    """
+    Form allowing to search book list by keywords and date range.
+    """
     search = forms.CharField(
         max_length=255,
         required=False,
@@ -165,7 +174,9 @@ class SearchForm(forms.Form):
 
 
 class AddISBNForm(forms.Form):
-
+    """
+    Form allowing to add books isbn when adding book manually.
+    """
     isbn_num = forms.CharField(
         max_length=20,
         required=False,
@@ -176,4 +187,3 @@ class AddISBNForm(forms.Form):
     isbn_num.widget.attrs.update({
         'placeholder': 'ISBN number'
     })
-

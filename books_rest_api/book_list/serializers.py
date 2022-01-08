@@ -16,7 +16,8 @@ class IsbnSerializer(serializers.ModelSerializer):
 
 class BookSerializer(serializers.ModelSerializer):
     """
-    Create BookModel serializer with nested ISBN serialiser.
+    Create BookModel serializer with nested ISBN serializer.
+    Uses nested ISBN serializer.
     """
     isbn = IsbnSerializer(
         many=True,

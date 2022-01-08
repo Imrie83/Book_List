@@ -38,7 +38,7 @@ def example_books():
 @pytest.fixture
 def isbn_number(example_books):
     """
-    Create isbn numbers corresponding to books in db.
+    Create isbn corresponding to book in db
     :param example_books:
     """
     isbn1 = IsbnModel.objects.create(
