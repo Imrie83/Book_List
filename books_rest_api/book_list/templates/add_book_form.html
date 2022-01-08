@@ -10,11 +10,13 @@
         <div>{{ form.pub_lang }}</div>
         <div>
             {{ isbn_form.isbn_num }}
+            {% if isbn_form.errors %}
             <div class="valid-error">
             {% for key, value in isbn_form.errors.items %}
             {{ value|striptags }}
             {% endfor %}
             </div>
+            {% endif %}
         </div>
         <div>{{ form.pages }}</div>
         <div>{{ form.cover_link }}</div>

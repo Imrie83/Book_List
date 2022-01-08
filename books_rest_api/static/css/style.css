@@ -95,6 +95,11 @@ body {
     flex-direction: column;
     align-items: flex-start;
   }
+  .msg {
+  padding: 5px 0 10px 0;
+  min-width: 100%;
+  text-align: center;
+  }
 
   .menu {
     position: absolute;
@@ -135,6 +140,11 @@ body {
   /* Burger menu */
   .menu-container span {
     display: none;
+  }
+  .msg {
+  padding: 5px 0 10px 0;
+  max-width: 100%;
+  text-align: center;
   }
 
   .menu {
@@ -189,16 +199,17 @@ body {
 
 .search-bar {
   height: 16px;
-  width: 264px;
+  width: 140px;
   border: none;
+  border-bottom: solid darkgray 1px;
   margin: 1px;
-  border-radius: 10px 10px 0 0;
 }
 .date-picker {
-  width: 132px;
+  width: 130px;
   height: 16px;
   border: none;
   margin: 1px;
+  border-bottom: solid darkgray 1px;
 }
 .error-msg {
   display: flex;
@@ -207,11 +218,10 @@ body {
   font-size: 22px;
 }
 .search-btn {
-  width: 268px;
   border: none;
   height: 20px;
   margin: 1px;
-  border-radius: 0 0 10px 10px;
+
 }
 .add-book{
   display: flex;
@@ -264,4 +274,15 @@ body {
   padding: 5px 0 10px 0;
   font-size: 0.85em;
   color: darkred;
+}
+
+.search-bar-container{
+  display: flex;
+  flex-flow: nowrap;
+  flex-direction: row;
+  max-width: 95%;
+  margin: 5px auto 0 auto;
+  justify-content: space-around;
+  padding: 0 20px 20px 20px;
+  font-size: 0.8em;
 }
