@@ -3,7 +3,24 @@ body {
   font-family: Sans-Serif, serif;
   margin: 0;
 }
-
+.search-bar-container{
+  display: flex;
+  max-width: 95%;
+  margin: 5px auto 0 auto;
+  font-size: 0.8em;
+  color: gray;
+}
+.search-bar {
+  height: 16px;
+  border: none;
+  border-bottom: solid darkgray 1px;
+}
+.date-picker {
+  border: none;
+  border-bottom: solid darkgray 1px;
+  background: white;
+  color: gray;
+}
 /* MENU*/
 .menu-container {
   position: relative;
@@ -91,6 +108,37 @@ body {
 
 /* mobile styles */
 @media only screen and (max-width: 799px) {
+  .search-bar-container{
+    flex-direction: row;
+    justify-content: center;
+        padding: 0 20px 20px 0;
+  }
+  .search-bar-container ul{
+    flex-direction: column;
+    list-style: none;
+    text-align: center;
+  }
+  .search-bar-container li{
+    margin-top: 5px;
+  }
+  .search-bar {
+    width: 141px;
+    margin: 1px;
+  }
+  .date-picker {
+    width: 142px;
+    height: 16px;
+    margin: 1px;
+  }
+  .search-btn {
+    border: none;
+    height: 18px;
+    width: 142px;
+    margin: 1px;
+    color: gray;
+    transition-duration: 0.3s;
+    border-radius: 2px;
+  }
   .menu-container {
     flex-direction: column;
     align-items: flex-start;
@@ -124,6 +172,24 @@ body {
 
 /* desktop styles */
 @media only screen and (min-width: 800px) {
+  .search-bar-container{
+    flex-flow: nowrap;
+    flex-direction: row;
+    justify-content: space-around;
+    justify-items: flex-start;
+    padding: 0 20px 20px 20px;
+  }
+  .search-bar {
+    width: 140px;
+  }
+  .search-btn {
+    margin-top: -5px;
+  }
+  .date-picker {
+    width: 130px;
+    height: 16px;
+    margin: -5px 1px;
+  }
   .menu-container {
     width: 100%;
     color: #cdcdcd;
@@ -197,20 +263,6 @@ body {
   padding: 0 4px 0 4px;
 }
 
-.search-bar {
-  height: 16px;
-  width: 140px;
-  border: none;
-  border-bottom: solid darkgray 1px;
-  margin: 1px;
-}
-.date-picker {
-  width: 130px;
-  height: 16px;
-  border: none;
-  margin: 1px;
-  border-bottom: solid darkgray 1px;
-}
 .error-msg {
   display: flex;
   justify-content: center;
@@ -219,10 +271,16 @@ body {
 }
 .search-btn {
   border: none;
-  height: 20px;
-  margin: 1px;
-
+  height: 18px;
+  color: gray;
+  transition-duration: 0.3s;
+  border-radius: 2px;
 }
+.search-btn:hover {
+  background: #d2d2d2;
+  transition-duration: 0.3s;
+}
+
 .add-book{
   display: flex;
   flex-direction: column;
@@ -231,7 +289,7 @@ body {
   max-width: 300px;
   border-radius: 15px;
   padding: 15px;
-  box-shadow: gray 0 0 25px 1px;
+  box-shadow: rgba(128, 128, 128, 0.2) 0 0 25px 1px;
 
 
 }
@@ -239,6 +297,9 @@ body {
   margin: 5px auto 5px auto;
   height: 25px;
   width: 250px;
+}
+.add-book input[type=submit]{
+  width: 259px;
 }
 
 .cover-container {
@@ -276,13 +337,14 @@ body {
   color: darkred;
 }
 
-.search-bar-container{
+.search-bar-container ul{
+  list-style: none;
   display: flex;
-  flex-flow: nowrap;
-  flex-direction: row;
-  max-width: 95%;
-  margin: 5px auto 0 auto;
-  justify-content: space-around;
-  padding: 0 20px 20px 20px;
-  font-size: 0.8em;
+}
+.search-bar-container li{
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.add-book .pick-date {
+  width: 253px;
 }

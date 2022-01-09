@@ -94,6 +94,9 @@ class AddBookForm(forms.ModelForm):
         self.fields['cover_link'].widget.attrs.update({
             'placeholder': 'Link to book cover'
         })
+        self.fields['pub_date'].widget.attrs.update({
+            'class': 'pick-date'
+        })
         self.fields['author'].required = False
         self.fields['pub_lang'].required = False
         self.fields['pub_date'].required = False

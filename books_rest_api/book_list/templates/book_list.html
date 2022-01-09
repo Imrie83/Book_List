@@ -8,11 +8,13 @@
         <div class="search-bar-container">
             <form method="post">
                 {% csrf_token %}
-                {{ form.search }}
-                Published
-                from:{{ form.date_from }}
-                to:{{ form.date_to }}
-                <input type="submit" value="search" class="search-btn">
+                <ul>
+                <li>{{ form.search }}</li>
+                <li>Published between:</li>
+                <li>{{ form.date_from }}</li>
+                <li>{{ form.date_to }}</li>
+                <li><input type="submit" value="search" class="search-btn"></li>
+                </ul>
             </form>
         </div>
         <div class="container">
@@ -52,7 +54,7 @@
                     {% endif %}
                     {% if book.pages %}
                     <div>
-                        <strong>Pages:</strong>{{ book.pages }}
+                        <strong>Pages:</strong> {{ book.pages }}
                     </div>
                     {% endif %}
                     {% for b in book.book_isbn.all %}
