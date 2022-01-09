@@ -8,7 +8,7 @@ body {
   max-width: 95%;
   margin: 5px auto 0 auto;
   font-size: 0.8em;
-  color: gray;
+  color: rgb(94, 94, 94);
 }
 .search-bar {
   height: 16px;
@@ -19,7 +19,7 @@ body {
   border: none;
   border-bottom: solid darkgray 1px;
   background: white;
-  color: gray;
+  color: rgb(94, 94, 94);
 }
 /* MENU*/
 .menu-container {
@@ -111,7 +111,7 @@ body {
   .search-bar-container{
     flex-direction: row;
     justify-content: center;
-        padding: 0 20px 20px 0;
+    padding: 0 20px 20px 0;
   }
   .search-bar-container ul{
     flex-direction: column;
@@ -135,7 +135,7 @@ body {
     height: 18px;
     width: 142px;
     margin: 1px;
-    color: gray;
+    color: rgb(94, 94, 94);
     transition-duration: 0.3s;
     border-radius: 2px;
   }
@@ -272,7 +272,7 @@ body {
 .search-btn {
   border: none;
   height: 18px;
-  color: gray;
+  color: rgb(94, 94, 94);;
   transition-duration: 0.3s;
   border-radius: 2px;
 }
