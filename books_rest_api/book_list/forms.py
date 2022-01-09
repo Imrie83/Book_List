@@ -83,19 +83,29 @@ class AddBookForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(AddBookForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs.update({'placeholder': 'Title'})
-        self.fields['author'].widget.attrs.update({'placeholder': 'Author'})
+        self.fields['title'].widget.attrs.update({
+            'placeholder': 'Title',
+            'aria-label': 'book title',
+        })
+        self.fields['author'].widget.attrs.update({
+            'placeholder': 'Author',
+            'aria-label': 'author',
+        })
         self.fields['pub_lang'].widget.attrs.update({
-            'placeholder': 'Publication language'
+            'placeholder': 'Publication language',
+            'aria-label': 'publication language',
         })
         self.fields['pages'].widget.attrs.update({
-            'placeholder': 'Number of pages'
+            'placeholder': 'Number of pages',
+            'aria-label': 'number of pages',
         })
         self.fields['cover_link'].widget.attrs.update({
-            'placeholder': 'Link to book cover'
+            'placeholder': 'Link to book cover',
+            'aria-label': 'link to book cover',
         })
         self.fields['pub_date'].widget.attrs.update({
-            'class': 'pick-date'
+            'class': 'pick-date',
+            'aria-label': 'publication date',
         })
         self.fields['author'].required = False
         self.fields['pub_lang'].required = False
@@ -134,11 +144,26 @@ class ImportBooksForm(forms.Form):
         required=False,
     )
 
-    search_title.widget.attrs.update({'placeholder': 'title'})
-    search_author.widget.attrs.update({'placeholder': 'author'})
-    search_isbn.widget.attrs.update({'placeholder': 'isbn'})
-    search_subject.widget.attrs.update({'placeholder': 'category'})
-    search_publisher.widget.attrs.update({'placeholder': 'publisher'})
+    search_title.widget.attrs.update({
+        'placeholder': 'title',
+        'aria-label': 'search by title',
+    })
+    search_author.widget.attrs.update({
+        'placeholder': 'author',
+        'aria-label': 'search by author',
+    })
+    search_isbn.widget.attrs.update({
+        'placeholder': 'isbn',
+        'aria-label': 'search by isbn',
+    })
+    search_subject.widget.attrs.update({
+        'placeholder': 'category',
+        'aria-label': 'search by category',
+    })
+    search_publisher.widget.attrs.update({
+        'placeholder': 'publisher',
+        'aria-label': 'search by publisher',
+    })
 
 
 class SearchForm(forms.Form):
@@ -154,25 +179,32 @@ class SearchForm(forms.Form):
         max_length=255,
         required=False,
         label='Publication span',
-        widget=DatePickerField()
+        widget=DatePickerField(attrs={
+            'aria-label': 'published after',
+        })
     )
     date_to = forms.CharField(
         max_length=255,
         required=False,
         label='',
-        widget=DatePickerField()
+        widget=DatePickerField(attrs={
+            'aria-label': 'published before',
+        })
 
     )
 
     search.widget.attrs.update({
         'placeholder': 'title / author / language',
-        'class': 'search-bar'
+        'class': 'search-bar',
+        'aria-label': 'search keyword',
     })
     date_from.widget.attrs.update({
-        'class': 'date-picker'
+        'class': 'date-picker',
+        'aria-label': 'search after publication date',
     })
     date_to.widget.attrs.update({
-        'class': 'date-picker'
+        'class': 'date-picker',
+        'aria-label': 'search before publication date',
     })
 
 
@@ -188,5 +220,6 @@ class AddISBNForm(forms.Form):
     )
 
     isbn_num.widget.attrs.update({
-        'placeholder': 'ISBN number'
+        'placeholder': 'ISBN number',
+        'aria-label': 'add isbn',
     })
