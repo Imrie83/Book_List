@@ -135,17 +135,18 @@ class AddBookView(View):
         if form.is_valid() and isbn_form.is_valid():
             book = form.save()
 
-            isbn_type = ''
-            if len(isbn_form.cleaned_data['isbn_num']) == 10:
-                isbn_type = 'ISBN_10'
-            elif len(isbn_form.cleaned_data['isbn_num']) == 13:
-                isbn_type = 'ISBN_13'
+            if isbn_form.cleaned_data['isbn_num']:
+                isbn_type = ''
+                if len(isbn_form.cleaned_data['isbn_num']) == 10:
+                    isbn_type = 'ISBN_10'
+                elif len(isbn_form.cleaned_data['isbn_num']) == 13:
+                    isbn_type = 'ISBN_13'
 
-            IsbnModel.objects.create(
-                book_id=book.pk,
-                isbn_type=isbn_type,
-                isbn_num=isbn_form.cleaned_data['isbn_num']
-            )
+                IsbnModel.objects.create(
+                    book_id=book.pk,
+                    isbn_type=isbn_type,
+                    isbn_num=isbn_form.cleaned_data['isbn_num']
+                )
 
             return redirect('/')
 
@@ -270,7 +271,7 @@ class ImportBooksView(View):
             )
 
 
-class BookViewSet(generics.ListAPIView):
+class BooksAPIViewSet(generics.ListAPIView):
     """
     API end point allowing to view book list.
     Pagination set to 10 entries per page.
