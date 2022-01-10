@@ -204,6 +204,7 @@ class ImportBooksView(View):
                 query += f'+inpublisher:"{search_publisher}"'
             if search_subject:
                 query += f'+subject:"{search_subject}"'
+            query += '&maxResults=40'  # max allowed results
 
             resp = requests.get(query)
             if resp.status_code == 200 and json.loads(resp.text)['totalItems']:
