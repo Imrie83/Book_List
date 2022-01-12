@@ -30,6 +30,7 @@ class BookListView(View):
     available, if books matching query found returns paginated
     queryset with form.
     """
+
     def get(self, request):
         form = SearchForm()
         book_list = BookModel.objects.all().order_by(
@@ -114,6 +115,7 @@ class AddBookView(View):
     redirect to book list, if data incorrect returns form with appropriate
     error / validation messages for user.
     """
+
     def get(self, request):
         form = AddBookForm()
         isbn_form = AddISBNForm()
@@ -173,6 +175,7 @@ class ImportBooksView(View):
     list with information about number of imported books. If no books
     matching query found, returns to form with appropriate message
     """
+
     def get(self, request):
         form = ImportBooksForm()
         return render(
@@ -186,6 +189,7 @@ class ImportBooksView(View):
     def post(self, request):
         form = ImportBooksForm(request.POST)
         if form.is_valid():
+            max_result = 40
             query = 'https://www.googleapis.com/books/v1/volumes?q='
 
             search_title = form.cleaned_data['search_title']
@@ -194,6 +198,7 @@ class ImportBooksView(View):
             search_publisher = form.cleaned_data['search_publisher']
             search_subject = form.cleaned_data['search_subject']
 
+            # build query with import criteria
             if search_title:
                 query += f'+intitle:"{search_title}"'
             if search_author:
@@ -204,18 +209,34 @@ class ImportBooksView(View):
                 query += f'+inpublisher:"{search_publisher}"'
             if search_subject:
                 query += f'+subject:"{search_subject}"'
-            query += '&maxResults=40'  # max allowed results
+            query += f'&maxResults={max_result}&startIndex='  # max allowed results
 
-            resp = requests.get(query)
+            # query start index
+            start_index = '0'
+            resp = requests.get(query + start_index)
+
+            # if any books found
             if resp.status_code == 200 and json.loads(resp.text)['totalItems']:
-                books = json.loads(resp.text)
+                books = json.loads(resp.text)['items']
+                books_num = int(json.loads(resp.text)['totalItems'])
 
+                # perform multiple queries if number of books found
+                # is greater than max allowed per query (40) and add
+                # query results to book list.
+                while books_num >= 41:
+                    start_index = str(int(start_index) + 40)
+                    books_num -= 40
+                    resp = requests.get(query + start_index)
+                    books += json.loads(resp.text)['items']
             else:
                 books = None
 
             if books:
+                # debug...
+                print(f'books found: {len(books)}')
+
                 books_added = 0
-                for b in books['items']:
+                for b in books:
                     if 'title' in b['volumeInfo']:
                         book = BookModel.objects.create(
                             title=b['volumeInfo']['title']
