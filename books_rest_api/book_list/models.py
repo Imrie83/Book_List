@@ -31,8 +31,18 @@ class BookModel(models.Model):
         null=True,
     )
     cover_link = models.URLField(
-        max_length=255,
+        max_length=500,
         verbose_name='Cover link',
+        null=True,
+    )
+    self_link = models.URLField(
+        verbose_name='self link',
+        max_length=500,
+        null=True,
+    )
+    large_cover = models.URLField(
+        max_length=500,
+        verbose_name='Large cover link',
         null=True,
     )
 

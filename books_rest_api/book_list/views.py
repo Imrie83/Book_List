@@ -274,6 +274,19 @@ class ImportBooksView(View):
                         isbn = None
 
                     try:
+                        self_link = b['selfLink']
+                    except KeyError as e:
+                        print(e)
+                        self_link = None
+
+                    try:
+                        self_info = json.loads(requests.get(b['selfLink']).text)
+                        cover = self_info['volumeInfo']['imageLinks']['large']
+                    except KeyError as e:
+                        print(e)
+                        cover = None
+
+                    try:
                         cover_link = b['volumeInfo']['imageLinks']['thumbnail']
                     except KeyError as e:
                         print(e)
@@ -293,6 +306,8 @@ class ImportBooksView(View):
                                 pub_lang=pub_lang,
                                 pages=page_count,
                                 cover_link=cover_link,
+                                self_link=self_link,
+                                large_cover=cover,
                             )
                             books_added += 1
                             if isbn:
