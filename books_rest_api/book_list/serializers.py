@@ -35,4 +35,6 @@ class BookSerializer(serializers.ModelSerializer):
             'pages',
             'isbn',
             'cover_link',
+            'self_link',
+            'large_cover',
         ]
