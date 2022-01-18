@@ -237,41 +237,107 @@ class ImportBooksView(View):
 
                 books_added = 0
                 for b in books:
-                    if 'title' in b['volumeInfo']:
-                        book = BookModel.objects.create(
-                            title=b['volumeInfo']['title']
-                        )
-                        books_added += 1
+                    try:
+                        title = b['volumeInfo']['title']
+                    except KeyError as e:
+                        print(e)
+                        title = None
 
-                        if 'authors' in b['volumeInfo']:
-                            book.author = ', '.join(b['volumeInfo']['authors'])
+                    try:
+                        author = ', '.join(b['volumeInfo']['authors'])
+                    except KeyError as e:
+                        print(e)
+                        author = None
 
-                        if 'publishedDate' in b['volumeInfo']:
-                            book.pub_date = b['volumeInfo']['publishedDate']
+                    try:
+                        pub_date = b['volumeInfo']['publishedDate']
+                    except KeyError as e:
+                        print(e)
+                        pub_date = None
 
-                        if 'language' in b['volumeInfo']:
-                            book.pub_lang = b['volumeInfo']['language']
+                    try:
+                        pub_lang = b['volumeInfo']['language']
+                    except KeyError as e:
+                        print(e)
+                        pub_lang = None
 
-                        if 'pageCount' in b['volumeInfo']:
-                            book.pages = int(b['volumeInfo']['pageCount'])
+                    try:
+                        page_count = int(b['volumeInfo']['pageCount'])
+                    except KeyError as e:
+                        print(e)
+                        page_count = None
 
-                        if 'imageLinks' in b['volumeInfo']:
-                            book.cover_link = (
-                                b['volumeInfo']['imageLinks']['thumbnail']
+                    try:
+                        isbn = b['volumeInfo']['industryIdentifiers']
+                    except KeyError as e:
+                        print(e)
+                        isbn = None
+
+                    try:
+                        cover_link = b['volumeInfo']['imageLinks']['thumbnail']
+                    except KeyError as e:
+                        print(e)
+                        cover_link = None
+
+                    if title:
+                        if not BookModel.objects.filter(
+                                title=title,
+                                author=author,
+                                pub_lang=pub_lang,
+                                pub_date=pub_date,
+                        ).exists():
+                            book = BookModel.objects.create(
+                                title=title,
+                                author=author,
+                                pub_date=pub_date,
+                                pub_lang=pub_lang,
+                                pages=page_count,
+                                cover_link=cover_link,
                             )
-
-                        book.save()
-
-                        if 'industryIdentifiers' in b['volumeInfo']:
-                            for element in (
-                                    b['volumeInfo']['industryIdentifiers']
-                            ):
-                                if 'isbn' in element['type'].lower():
-                                    IsbnModel.objects.create(
-                                        book_id=book.pk,
-                                        isbn_num=element['identifier'],
-                                        isbn_type=element['type'],
-                                    )
+                            books_added += 1
+                            if isbn:
+                                for num in isbn:
+                                    if 'isbn' in num['type'].lower():
+                                        IsbnModel.objects.create(
+                                            book_id=book.pk,
+                                            isbn_num=num['identifier'],
+                                            isbn_type=num['type'],
+                                        )
+                # if 'title' in b['volumeInfo']:
+                    #     book = BookModel.objects.create(
+                    #         title=b['volumeInfo']['title']
+                    #     )
+                    #     books_added += 1
+                    #
+                    #     if 'authors' in b['volumeInfo']:
+                    #         book.author = ', '.join(b['volumeInfo']['authors'])
+                    #
+                    #     if 'publishedDate' in b['volumeInfo']:
+                    #         book.pub_date = b['volumeInfo']['publishedDate']
+                    #
+                    #     if 'language' in b['volumeInfo']:
+                    #         book.pub_lang = b['volumeInfo']['language']
+                    #
+                    #     if 'pageCount' in b['volumeInfo']:
+                    #         book.pages = int(b['volumeInfo']['pageCount'])
+                    #
+                    #     if 'imageLinks' in b['volumeInfo']:
+                    #         book.cover_link = (
+                    #             b['volumeInfo']['imageLinks']['thumbnail']
+                    #         )
+                    #
+                    #     book.save()
+                    #
+                    #     if 'industryIdentifiers' in b['volumeInfo']:
+                    #         for element in (
+                    #                 b['volumeInfo']['industryIdentifiers']
+                    #         ):
+                    #             if 'isbn' in element['type'].lower():
+                    #                 IsbnModel.objects.create(
+                    #                     book_id=book.pk,
+                    #                     isbn_num=element['identifier'],
+                    #                     isbn_type=element['type'],
+                    #                 )
 
                 form = ImportBooksForm()
                 return render(
