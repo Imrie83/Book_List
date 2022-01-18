@@ -75,6 +75,8 @@ class AddBookForm(forms.ModelForm):
             'pub_lang': '',
             'pages': '',
             'cover_link': '',
+            'self_link': '',
+            'large_cover': '',
         }
 
         widgets = {
@@ -100,18 +102,29 @@ class AddBookForm(forms.ModelForm):
             'aria-label': 'number of pages',
         })
         self.fields['cover_link'].widget.attrs.update({
-            'placeholder': 'Link to book cover',
-            'aria-label': 'link to book cover',
+            'placeholder': 'Cover thumbnail link',
+            'aria-label': 'Cover thumbnail link',
         })
         self.fields['pub_date'].widget.attrs.update({
             'class': 'pick-date',
             'aria-label': 'publication date',
         })
+        self.fields['large_cover'].widget.attrs.update({
+            'placeholder': 'Large cover image link',
+            'aria-label': 'Large cover image link'
+        })
+        self.fields['self_link'].widget.attrs.update({
+            'placeholder': 'Link to more details',
+            'aria-label': 'Link to more details',
+        })
+
         self.fields['author'].required = False
         self.fields['pub_lang'].required = False
         self.fields['pub_date'].required = False
         self.fields['pages'].required = False
         self.fields['cover_link'].required = False
+        self.fields['large_cover'].required = False
+        self.fields['self_link'].required = False
 
 
 class ImportBooksForm(forms.Form):
@@ -222,4 +235,26 @@ class AddISBNForm(forms.Form):
     isbn_num.widget.attrs.update({
         'placeholder': 'ISBN number',
         'aria-label': 'add isbn',
+    })
+
+
+class EditIsbnForm(forms.Form):
+    """
+    Form allowing to edit ISBN10 and ISBN13
+    """
+    isbn_10 = forms.CharField(
+        max_length=255,
+        label='ISBN 10',
+    )
+    isbn_13 = forms.CharField(
+        max_length=255,
+        label='ISBN 13',
+    )
+    isbn_10.widget.attrs.update({
+        'aria-label': 'edit isbn 10',
+        'placeholder': 'ISBN 10',
+    })
+    isbn_13.widget.attrs.update({
+        'aria-label': 'edit isbn 13',
+        'placeholder': 'ISBN 13',
     })

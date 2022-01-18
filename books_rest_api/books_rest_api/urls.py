@@ -20,6 +20,7 @@ from book_list.views import (
     AddBookView,
     ImportBooksView,
     BooksAPIViewSet,
+    EditBookView,
 )
 
 urlpatterns = [
@@ -28,4 +29,5 @@ urlpatterns = [
     path('add_book/', AddBookView.as_view(), name='add_book'),
     path('import/', ImportBooksView.as_view(), name='import'),
     path('books/api/', BooksAPIViewSet.as_view(), name='books_api'),
+    path('edit/<int:pk>/', EditBookView.as_view(), name='edit_book'),
 ]

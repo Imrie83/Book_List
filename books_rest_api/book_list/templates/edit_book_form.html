@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}
+    Add Book
+{% endblock %}
+{% block meta_name %}
+    <meta name="description" content="A form allowing to manually add a single book.">
+{% endblock %}
+{% block content %}
+    <div class="container">
+    <form method="post" class="add-book">
+        Add book:<br><br>
+        {% csrf_token %}
+        <div><label>Title:</label><br>
+            {{ book_form.title }}</div>
+        <div><label>Authors:</label><br>
+            {{ book_form.author }}</div>
+        <div><label>Publication date:</label>
+            {{ book_form.pub_lang }}</div>
+        <div>
+            <label>ISBN 10:</label>
+            {{ isbn_form.isbn_10 }}
+            {% if isbn_form.errors %}
+            <div class="valid-error">
+            {% for key, value in isbn_form.errors.items %}
+            {{ value|striptags }}
+            {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div>
+            <label>ISBN 13:</label>
+            {{ isbn_form.isbn_13 }}
+            {% if isbn_form.errors %}
+            <div class="valid-error">
+            {% for key, value in isbn_form.errors.items %}
+            {{ value|striptags }}
+            {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div><label>Pages:</label>
+            {{ book_form.pages }}</div>
+        <div><label>Link to thumbnail:</label>
+            {{ book_form.cover_link }}</div>
+        <div><label>Link to cover:</label>
+            {{ book_form.large_cover }}</div>
+        <div><label>Link to more details:</label>
+            {{ book_form.self_link }}</div>
+        <div><label>Published on:</label>
+            {{ book_form.pub_date }}</div>
+        <input type="submit" value="Submit">
+    </form>
+    </div>
+{% endblock %}
