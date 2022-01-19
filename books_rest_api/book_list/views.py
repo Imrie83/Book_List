@@ -364,6 +364,15 @@ class BooksAPIViewSet(generics.ListAPIView):
 
 
 class EditBookView(View):
+    """
+    View allowing to edit book details.
+
+    GET method passes in context book and isbn forms
+    filled it with initial values based on pk attribute.
+
+    POST method collects data from forms and
+    updates book and isbn models with updated information.
+    """
     def get(self, request, pk):
         try:
             book = BookModel.objects.get(pk=pk)
@@ -410,9 +419,44 @@ class EditBookView(View):
             }
         )
 
-    # def post(self, request, pk):
-    #     book_form = AddBookForm(request.POST)
-    #     isbn_form = EditIsbnForm(request.POST)
-    #
-    #     if book_form.is_valid() and isbn_form.is_valid():
-            
+    def post(self, request, pk):
+        book_form = AddBookForm(request.POST)
+        isbn_form = EditIsbnForm(request.POST)
+
+        if book_form.is_valid() and isbn_form.is_valid():
+            book = BookModel.objects.get(pk=pk)
+            book.title = book_form.cleaned_data['title']
+            book.author = book_form.cleaned_data['author']
+            book.pub_date = book_form.cleaned_data['pub_date']
+            book.pub_lang = book_form.cleaned_data['pub_lang']
+            book.pages = book_form.cleaned_data['pages']
+            book.cover_link = book_form.cleaned_data['cover_link']
+            book.self_link = book_form.cleaned_data['self_link']
+            book.large_cover = book_form.cleaned_data['large_cover']
+            book.save()
+
+            isbn_10 = isbn_form.cleaned_data['isbn_10']
+            isbn_13 = isbn_form.cleaned_data['isbn_13']
+
+            new_isbn_10 = IsbnModel.objects.update_or_create(
+                book_id=pk,
+                isbn_type='ISBN_10',
+                defaults={'isbn_num': isbn_10},
+            )
+
+            new_isbn_13 = IsbnModel.objects.update_or_create(
+                book_id=pk,
+                isbn_type='ISBN_13',
+                defaults={'isbn_num': isbn_13},
+            )
+
+            return redirect('/')
+
+        return render(
+            request,
+            'edit_book_form.html',
+            context={
+                'book_form': book_form,
+                'isbn_form': isbn_form,
+            }
+        )
