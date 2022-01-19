@@ -352,3 +352,8 @@ body {
   font-size: 0.8rem;
 
 }
+
+a {
+  text-decoration: none;
+  color: #000000;
+}
