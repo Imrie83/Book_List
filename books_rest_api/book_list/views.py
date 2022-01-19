@@ -1,5 +1,7 @@
 import requests
 import json
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.views import View
@@ -11,7 +13,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from book_list.forms import (
     AddBookForm,
     ImportBooksForm,
-    SearchForm, AddISBNForm,
+    SearchForm, AddISBNForm, EditIsbnForm,
 )
 
 from book_list.models import BookModel, IsbnModel
@@ -318,41 +320,6 @@ class ImportBooksView(View):
                                             isbn_num=num['identifier'],
                                             isbn_type=num['type'],
                                         )
-                # if 'title' in b['volumeInfo']:
-                    #     book = BookModel.objects.create(
-                    #         title=b['volumeInfo']['title']
-                    #     )
-                    #     books_added += 1
-                    #
-                    #     if 'authors' in b['volumeInfo']:
-                    #         book.author = ', '.join(b['volumeInfo']['authors'])
-                    #
-                    #     if 'publishedDate' in b['volumeInfo']:
-                    #         book.pub_date = b['volumeInfo']['publishedDate']
-                    #
-                    #     if 'language' in b['volumeInfo']:
-                    #         book.pub_lang = b['volumeInfo']['language']
-                    #
-                    #     if 'pageCount' in b['volumeInfo']:
-                    #         book.pages = int(b['volumeInfo']['pageCount'])
-                    #
-                    #     if 'imageLinks' in b['volumeInfo']:
-                    #         book.cover_link = (
-                    #             b['volumeInfo']['imageLinks']['thumbnail']
-                    #         )
-                    #
-                    #     book.save()
-                    #
-                    #     if 'industryIdentifiers' in b['volumeInfo']:
-                    #         for element in (
-                    #                 b['volumeInfo']['industryIdentifiers']
-                    #         ):
-                    #             if 'isbn' in element['type'].lower():
-                    #                 IsbnModel.objects.create(
-                    #                     book_id=book.pk,
-                    #                     isbn_num=element['identifier'],
-                    #                     isbn_type=element['type'],
-                    #                 )
 
                 form = ImportBooksForm()
                 return render(
@@ -394,3 +361,102 @@ class BooksAPIViewSet(generics.ListAPIView):
     search_fields = ['title', 'author', 'pub_lang']
     ordering_fields = ['title', 'author', 'pub_lang']
     ordering = ['title', 'author', 'pub_date']
+
+
+class EditBookView(View):
+    """
+    View allowing to edit book details.
+
+    GET method passes in context book and isbn forms
+    filled it with initial values based on pk attribute.
+
+    POST method collects data from forms and
+    updates book and isbn models with updated information.
+    """
+    def get(self, request, pk):
+        try:
+            book = BookModel.objects.get(pk=pk)
+        except ObjectDoesNotExist as e:
+            print(e)
+            return redirect('/')
+
+        try:
+            isbn = IsbnModel.objects.filter(book_id=book)
+        except ObjectDoesNotExist as e:
+            print(e)
+            isbn = None
+
+        isbn_10 = None
+        isbn_13 = None
+
+        if isbn:
+            for num in isbn:
+                if len(num.isbn_num) == 10:
+                    isbn_10 = num.isbn_num
+                elif len(num.isbn_num) == 13:
+                    isbn_13 = num.isbn_num
+
+        book_form = AddBookForm(initial={
+            'title': book.title,
+            'author': book.author,
+            'pub_date': book.pub_date,
+            'pub_lang': book.pub_lang,
+            'pages': book.pages,
+            'cover_link': book.cover_link,
+            'self_link': book.self_link,
+            'large_cover': book.large_cover,
+        })
+        isbn_form = EditIsbnForm(initial={
+            'isbn_10': isbn_10,
+            'isbn_13': isbn_13,
+        })
+        return render(
+            request,
+            'edit_book_form.html',
+            context={
+                'book_form': book_form,
+                'isbn_form': isbn_form,
+            }
+        )
+
+    def post(self, request, pk):
+        book_form = AddBookForm(request.POST)
+        isbn_form = EditIsbnForm(request.POST)
+
+        if book_form.is_valid() and isbn_form.is_valid():
+            book = BookModel.objects.get(pk=pk)
+            book.title = book_form.cleaned_data['title']
+            book.author = book_form.cleaned_data['author']
+            book.pub_date = book_form.cleaned_data['pub_date']
+            book.pub_lang = book_form.cleaned_data['pub_lang']
+            book.pages = book_form.cleaned_data['pages']
+            book.cover_link = book_form.cleaned_data['cover_link']
+            book.self_link = book_form.cleaned_data['self_link']
+            book.large_cover = book_form.cleaned_data['large_cover']
+            book.save()
+
+            isbn_10 = isbn_form.cleaned_data['isbn_10']
+            isbn_13 = isbn_form.cleaned_data['isbn_13']
+
+            new_isbn_10 = IsbnModel.objects.update_or_create(
+                book_id=pk,
+                isbn_type='ISBN_10',
+                defaults={'isbn_num': isbn_10},
+            )
+
+            new_isbn_13 = IsbnModel.objects.update_or_create(
+                book_id=pk,
+                isbn_type='ISBN_13',
+                defaults={'isbn_num': isbn_13},
+            )
+
+            return redirect('/')
+
+        return render(
+            request,
+            'edit_book_form.html',
+            context={
+                'book_form': book_form,
+                'isbn_form': isbn_form,
+            }
+        )

@@ -348,3 +348,12 @@ body {
 .add-book .pick-date {
   width: 253px;
 }
+.add-book label {
+  font-size: 0.8rem;
+
+}
+
+a {
+  text-decoration: none;
+  color: #000000;
+}

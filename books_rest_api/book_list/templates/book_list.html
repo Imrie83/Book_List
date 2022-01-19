@@ -41,7 +41,9 @@
                 <div class="details">
                     <div>
                         <strong class="title">
-                        {{ book.title }}
+                            <a href="/edit/{{ book.pk }}/">
+                                {{ book.title }}
+                            </a>
                         </strong>
                     </div>
                     {% if book.author %}
