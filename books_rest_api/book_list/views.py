@@ -220,16 +220,20 @@ class ImportBooksView(View):
             # if any books found
             if resp.status_code == 200 and json.loads(resp.text)['totalItems']:
                 books = json.loads(resp.text)['items']
-                books_num = int(json.loads(resp.text)['totalItems'])
 
-                # perform multiple queries if number of books found
-                # is greater than max allowed per query (40) and add
-                # query results to book list.
-                while books_num >= 41:
-                    start_index = str(int(start_index) + 40)
-                    books_num -= 40
-                    resp = requests.get(query + start_index)
-                    books += json.loads(resp.text)['items']
+                # TODO: check why server times out if more than 40 books
+                # looked up!
+
+                # books_num = int(json.loads(resp.text)['totalItems'])
+                #
+                # # perform multiple queries if number of books found
+                # # is greater than max allowed per query (40) and add
+                # # query results to book list.
+                # while books_num >= 41:
+                #     start_index = str(int(start_index) + 40)
+                #     books_num -= 40
+                #     resp = requests.get(query + start_index)
+                #     books += json.loads(resp.text)['items']
             else:
                 books = None
 
