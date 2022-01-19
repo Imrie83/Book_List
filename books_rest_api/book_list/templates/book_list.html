@@ -31,9 +31,13 @@
                             {% if not book.cover_link %}
                             No Cover Available
                             {% else %}
+                            {% if book.large_cover %}
                             <a href="{{ book.large_cover }}">
                                 <img src="{{ book.cover_link }}" aria-label="cover for {{ book.title }}">
                             </a>
+                            {% else %}
+                            <img src="{{ book.cover_link }}" aria-label="cover for {{ book.title }}">
+                            {% endif %}
                             {% endif %}
                         </div>
                     </div>
